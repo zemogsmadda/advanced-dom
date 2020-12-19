@@ -64,10 +64,58 @@ header.prepend(message); //first child
 header.append(message); //last child
 // how to copy it into other parts of the dom
 // header.append(message.cloneNode(true));
-header.before(message); //before the header element
-header.after(message); //after the header element
+// header.before(message); //before the header element
+// header.after(message); //after the header element
 
 //Delete elements
 document.querySelector(`.btn--close-cookie`).addEventListener(`click`, function(){
   message.remove();
-})
+  //Old way to do it
+  //message.parentElement.removeChild(message);
+});
+
+
+///////////////////////////////////////
+// Styles, attributes, and classes
+
+//Styles 
+message.style.backgroundColor = `#37383d`;
+message.style.width = `120%`;
+
+console.log(getComputedStyle(message).color);
+console.log(getComputedStyle(message).height);
+
+message.style.height = Number.parseFloat(getComputedStyle(message).height, 10) + 30 + `px`;
+
+document.documentElement.style.setProperty(`--color-primary`, `orangered`);
+
+//Attributes
+const logo = document.querySelector(`.nav__logo`);
+//You can access these property attributes like objects
+//Only standard properties are going to be read
+console.log(logo.alt, logo.src);
+console.log(logo.className);
+
+//Set Attributes
+logo.alt = `Beautiful minimalist logo`;
+
+//Set and console non standard attributes
+console.log(logo.getAttribute(`designer`));
+logo.setAttribute(`company`, `bankist`);
+
+const link = document.querySelector(`.nav__link--btn`);
+console.log(link.href);
+console.log(link.getAttribute(`href`));
+
+//Data attributes
+console.log(logo.dataset.versionNumber);
+
+//Classes
+logo.classList.add(`c`);
+logo.classList.remove(`c`);
+logo.classList.toggle(`c`);
+logo.classList.contains(`c`);
+
+//Dont use!! it will override the other classes and can only use one class
+logo.className =`Paul`;
+
