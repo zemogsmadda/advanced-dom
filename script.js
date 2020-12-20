@@ -32,8 +32,21 @@ document.addEventListener('keydown', function (e) {
 });
 
 ///////////////////////////////////////
-// Selecting, creating, and deleting elements
+// Lecture edits
 
+const btnScrollTo = document.querySelector(`.btn--scroll-to`);
+const section1 = document.querySelector(`#section--1`);
+
+btnScrollTo.addEventListener(`click`, function(e){
+  const s1coords = section1.getBoundingClientRect();
+
+  section1.scrollIntoView({behavior:`smooth`});
+
+});
+
+///////////////////////////////////////
+// Selecting, creating, and deleting elements
+/*
 //Will select the whole body, anything enclosed in the html
 console.log(document.documentElement);
 console.log(document.head);
@@ -73,11 +86,11 @@ document.querySelector(`.btn--close-cookie`).addEventListener(`click`, function(
   //Old way to do it
   //message.parentElement.removeChild(message);
 });
-
+*/
 
 ///////////////////////////////////////
 // Styles, attributes, and classes
-
+/*
 //Styles 
 message.style.backgroundColor = `#37383d`;
 message.style.width = `120%`;
@@ -118,4 +131,105 @@ logo.classList.contains(`c`);
 
 //Dont use!! it will override the other classes and can only use one class
 logo.className =`Paul`;
+*/
 
+///////////////////////////////////////
+// Smooth scrolling
+/*
+const btnScrollTo = document.querySelector(`.btn--scroll-to`);
+const section1 = document.querySelector(`#section--1`);
+
+//.getBoundingClientRect(); will show the coordinates of selected elements relative to viewport
+btnScrollTo.addEventListener(`click`, function(e){
+  const s1coords = section1.getBoundingClientRect();
+  // console.log(s1coords);
+
+  // console.log(e.target.getBoundingClientRect());
+
+  // console.log(`current scroll (x/y)`, window.pageXOffset, window.pageYOffset);
+
+  // console.log(`height and width of vp`, document.documentElement.clientHeight,
+  //                                       document.documentElement.clientWidth); 
+
+  //Scrolling
+  //Current position + current scroll
+  // window.scrollTo(s1coords.left + window.pageXOffset, 
+  //                 s1coords.top + window.pageYOffset);
+
+  //Better way to do it
+  // window.scrollTo({
+  //   left: s1coords.left + window.pageXOffset, 
+  //   top: s1coords.top + window.pageYOffset,
+  //   behavior: `smooth`,
+  // });
+
+  //More modern way
+  section1.scrollIntoView({behavior:`smooth`});
+
+  // console.log(s1coords.top);
+  // console.log(window.pageYOffset);
+});
+*/
+
+///////////////////////////////////////
+// Types of events and event handlers
+/*
+const h1 = document.querySelector(`h1`);
+
+const alertH1 = function(e){
+  alert(`addEventListener: Great! You are reading the heading`);
+
+  //Reason why we want to use the add event listener
+  //You can use more than one function
+  //This will remove the listener making it only a one time use
+  h1.removeEventListener(`mouseenter`, alertH1);
+};
+
+//Event listener attachment 1
+//More modern way
+h1.addEventListener(`mouseenter`, alertH1 );
+
+//Event listener attachment 2
+// h1.onmouseenter = function(e){
+//   alert(`addEventListener: Great! You are reading the heading`);
+// };
+
+// The eventlistener will be removed after 3s
+// setTimeout(function(){
+//   return h1.removeEventListener(`mouseenter`, alertH1)
+// }, 3000);
+*/
+
+///////////////////////////////////////
+// Event propagation in practice
+/*
+// rgb(255, 255, 255);
+const randomInt = (min, max) => Math.floor(Math.random() * (max - min + 1) + min);
+const randomColor = function() {
+  return `rgb(${randomInt(0, 255)}, ${randomInt(0, 255)}, ${randomInt(0, 255)})`;
+}
+
+console.log(randomColor(0, 255)); 
+
+//Will change the bottom two when clicked
+document.querySelector(`.nav__link`).addEventListener(`click`, function(e){
+  this.style.backgroundColor = randomColor()
+  console.log(`link`, e.target, e.currentTarget);
+
+  //How to stop event propagation
+  // e.stopPropagation();
+})
+//Will only change the bottom and itself
+document.querySelector(`.nav__links`).addEventListener(`click`, function(e){
+  this.style.backgroundColor = randomColor()
+  console.log(`container`, e.target, e.currentTarget);
+})
+//Will only change itself
+document.querySelector(`.nav`).addEventListener(`click`, function(e){
+  this.style.backgroundColor = randomColor()
+  console.log(`nav`, e.target, e.currentTarget);
+}, true) //When set to true the element will start listening from the DOM instead of bubbling up
+*/
+
+///////////////////////////////////////
+// Event delegation: implementing page navigation
