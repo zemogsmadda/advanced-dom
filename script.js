@@ -1,13 +1,14 @@
 'use strict';
 
-///////////////////////////////////////
-// Modal window
-
+const btnScrollTo = document.querySelector(`.btn--scroll-to`);
+const section1 = document.querySelector(`#section--1`);
 const modal = document.querySelector('.modal');
 const overlay = document.querySelector('.overlay');
 const btnCloseModal = document.querySelector('.btn--close-modal');
 const btnsOpenModal = document.querySelectorAll('.btn--show-modal');
 
+///////////////////////////////////////
+// Modal window
 const openModal = function (e) {
   e.preventDefault();
   modal.classList.remove('hidden');
@@ -34,14 +35,24 @@ document.addEventListener('keydown', function (e) {
 ///////////////////////////////////////
 // Lecture edits
 
-const btnScrollTo = document.querySelector(`.btn--scroll-to`);
-const section1 = document.querySelector(`#section--1`);
-
+//Button scrolling 
 btnScrollTo.addEventListener(`click`, function(e){
   const s1coords = section1.getBoundingClientRect();
 
   section1.scrollIntoView({behavior:`smooth`});
 
+});
+
+//Link delegation
+document.querySelector(`.nav__links`).addEventListener(`click`, function(e){
+  e.preventDefault();
+
+  if(e.target.classList.contains(`nav__link`)) {
+    const id = e.target.getAttribute(`href`);
+    document.querySelector(id).scrollIntoView({
+      behavior: `smooth`
+  });
+};
 });
 
 ///////////////////////////////////////
@@ -233,3 +244,73 @@ document.querySelector(`.nav`).addEventListener(`click`, function(e){
 
 ///////////////////////////////////////
 // Event delegation: implementing page navigation
+
+//Page navigation
+//Will implement smooth scroll on all three of the nav-links
+//DRY example
+//Not a good idea for large scale
+//If this was added to 10,000 elements, it would have to run through 10,000 forEach and affect performance
+// document.querySelectorAll(`.nav__link`).forEach(function(el){
+//   el.addEventListener(`click`, function(e){
+//     e.preventDefault();
+
+//     const id = this.getAttribute(`href`);
+//     document.querySelector(id).scrollIntoView({
+//       behavior: `smooth`
+//     });
+//   });
+// });
+
+//Event delegation 
+//Adding the event listener to a common parent making use of bubbling 
+
+//1. Add event listener to a common parent element
+//2. In the event listener, determine what element originated the event
+
+// document.querySelector(`.nav__links`).addEventListener(`click`, function(e){
+//   e.preventDefault();
+
+//   //How to ignore clicks that werent the navigation links
+//   if(e.target.classList.contains(`nav__link`)) {
+//     const id = e.target.getAttribute(`href`);
+//     document.querySelector(id).scrollIntoView({
+//       behavior: `smooth`
+//   });
+// };
+// });
+
+///////////////////////////////////////
+// Dom traversing
+/*
+const h1 = document.querySelector(`h1`);
+
+// Going downwards: selecting child elements
+console.log(h1.querySelectorAll(`.highlight`));
+console.log(h1.childNodes);
+console.log(h1.children);
+h1.firstElementChild.style.color = `white`;
+h1.lastElementChild.style.color = `orangered`;
+
+//Going upwards: selecting parents
+console.log(h1.parentNode);
+console.log(h1.parentElement);
+
+//Will find the closest parent
+h1.closest(`.header`).style.background = `var(--gradient-secondary)`;
+h1.closest(`h1`).style.background = `var(--gradient-primary)`;
+
+//Going sideways: selecting siblings
+console.log(h1.previousElementSibling); 
+console.log(h1.nextElementSibling); 
+
+console.log(h1.previousSibling);
+console.log(h1.nextSibling);
+
+//Will go up to parent then show all of that parent's children including itself
+console.log(h1.parentElement.children);
+
+[...h1.parentElement.children].forEach(function(el){
+  if(el !== h1) el.style.transform = `scale(0.5)`;
+})
+*/
+
