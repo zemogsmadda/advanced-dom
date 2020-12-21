@@ -7,6 +7,10 @@ const overlay = document.querySelector('.overlay');
 const btnCloseModal = document.querySelector('.btn--close-modal');
 const btnsOpenModal = document.querySelectorAll('.btn--show-modal');
 
+const tabs = document.querySelectorAll(`.operations__tab`);
+const tabsContainer = document.querySelector(`.operations__tab-container`);
+const tabsContent = document.querySelectorAll(`.operations__content`);
+
 ///////////////////////////////////////
 // Modal window
 const openModal = function (e) {
@@ -54,6 +58,25 @@ document.querySelector(`.nav__links`).addEventListener(`click`, function(e){
   });
 };
 });
+
+//Tabbed content
+tabsContainer.addEventListener(`click`, function(e){
+  const clicked = e.target.closest(`.operations__tab`);
+ 
+  if(!clicked) return;
+
+  tabs.forEach(function (t){
+    console.log(t);
+    return t.classList.remove(`operations__tab--active`)
+  });
+  tabsContent.forEach(function(c){
+    return c.classList.remove(`operations__content--active`);
+  })
+
+  clicked.classList.add(`operations__tab--active`);
+  
+  document.querySelector(`.operations__content--${clicked.dataset.tab}`).classList.add(`operations__content--active`);
+})
 
 ///////////////////////////////////////
 // Selecting, creating, and deleting elements
@@ -314,3 +337,34 @@ console.log(h1.parentElement.children);
 })
 */
 
+///////////////////////////////////////
+// Building a tabbed component
+/*
+const tabs = document.querySelectorAll(`.operations__tab`);
+const tabsContainer = document.querySelector(`.operations__tab-container`);
+const tabsContent = document.querySelectorAll(`.operations__content`);
+
+tabsContainer.addEventListener(`click`, function(e){
+  const clicked = e.target.closest(`.operations__tab`);
+  console.log(clicked);
+
+  //Guard clause
+  //if nothing is clicked it will return
+  //More modern
+  if(!clicked) return;
+
+  //Will make all tabs go down
+  tabs.forEach(function (t){
+    return t.classList.remove(`operations__tab--active`)
+  });
+  tabsContent.forEach(function(c){
+    return c.classList.remove(`operations__content--active`);
+  })
+
+  //Active tab
+  clicked.classList.add(`operations__tab--active`);
+  
+  //Activate content area
+  document.querySelector(`.operations__content--${clicked.dataset.tab}`).classList.add(`operations__content--active`);
+})
+*/
