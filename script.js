@@ -11,6 +11,8 @@ const tabs = document.querySelectorAll(`.operations__tab`);
 const tabsContainer = document.querySelector(`.operations__tab-container`);
 const tabsContent = document.querySelectorAll(`.operations__content`);
 
+const nav = document.querySelector(`.nav`);
+
 ///////////////////////////////////////
 // Modal window
 const openModal = function (e) {
@@ -42,9 +44,7 @@ document.addEventListener('keydown', function (e) {
 //Button scrolling 
 btnScrollTo.addEventListener(`click`, function(e){
   const s1coords = section1.getBoundingClientRect();
-
   section1.scrollIntoView({behavior:`smooth`});
-
 });
 
 //Link delegation
@@ -66,7 +66,6 @@ tabsContainer.addEventListener(`click`, function(e){
   if(!clicked) return;
 
   tabs.forEach(function (t){
-    console.log(t);
     return t.classList.remove(`operations__tab--active`)
   });
   tabsContent.forEach(function(c){
@@ -74,8 +73,38 @@ tabsContainer.addEventListener(`click`, function(e){
   })
 
   clicked.classList.add(`operations__tab--active`);
-  
-  document.querySelector(`.operations__content--${clicked.dataset.tab}`).classList.add(`operations__content--active`);
+
+  document.querySelector
+  (`.operations__content--${clicked.dataset.tab}`)
+    .classList.add(`operations__content--active`);
+})
+
+//Navigation Hover
+const handleHover = function(e, opacity) {
+  if (e.target.classList.contains(`nav__link`)) {
+    const link = e.target;
+    
+    const siblings = link
+      .closest(`.nav`)
+      .querySelectorAll(`.nav__link`);
+
+    const logo = link
+      .closest(`.nav`)
+      .querySelector(`img`);
+
+    siblings.forEach(function(el){
+      if (el !== link) el.style.opacity = opacity; 
+    })
+    logo.style.opacity = opacity;
+  }
+}
+
+nav.addEventListener(`mouseover`, function(e){
+  handleHover(e, 0.5);
+})
+
+nav.addEventListener(`mouseout`, function(e){
+  handleHover(e, 1);
 })
 
 ///////////////////////////////////////
@@ -132,8 +161,11 @@ message.style.width = `120%`;
 console.log(getComputedStyle(message).color);
 console.log(getComputedStyle(message).height);
 
+//Get computed style will show the actual measurement such as 30px but it is a string
+//Number.parsefloat will separate the px from the number 
 message.style.height = Number.parseFloat(getComputedStyle(message).height, 10) + 30 + `px`;
 
+//Everywhere in the document where color primary color is, it will get  changed to orangered
 document.documentElement.style.setProperty(`--color-primary`, `orangered`);
 
 //Attributes
@@ -170,6 +202,10 @@ logo.className =`Paul`;
 ///////////////////////////////////////
 // Smooth scrolling
 /*
+
+//window.pageYOffset = distance between the button's original position and bottom of screen
+//s1coords = distanc between the top of the page and bottom of the element
+
 const btnScrollTo = document.querySelector(`.btn--scroll-to`);
 const section1 = document.querySelector(`#section--1`);
 
@@ -368,3 +404,59 @@ tabsContainer.addEventListener(`click`, function(e){
   document.querySelector(`.operations__content--${clicked.dataset.tab}`).classList.add(`operations__content--active`);
 })
 */
+
+///////////////////////////////////////
+// Passing arguments to event handlers
+
+//Menu fade animation
+
+// const nav = document.querySelector(`.nav`);
+// nav.addEventListener(`mouseover`, function(e){
+//   if (e.target.classList.contains(`nav__link`)) {
+//     const link = e.target;
+//     const siblings = link.closest(`.nav`).querySelectorAll(`.nav__link`);
+//     const logo = link.closest(`.nav`).querySelector(`img`);
+
+//     siblings.forEach(function(el){
+//       if (el !== link) el.style.opacity = 0.5; 
+//     })
+//     logo.style.opacity = 0.5;
+//   }
+// })
+
+// nav.addEventListener(`mouseout`, function(e){
+//   if (e.target.classList.contains(`nav__link`)) {
+//     const link = e.target;
+//     const siblings = link.closest(`.nav`).querySelectorAll(`.nav__link`);
+//     const logo = link.closest(`.nav`).querySelector(`img`);
+
+//     siblings.forEach(function(el){
+//       if (el !== link) el.style.opacity = 1; 
+//     })
+//     logo.style.opacity = 1;
+//   }
+// })
+
+//Refactored
+// const handleHover = function(e, opacity) {
+//   if (e.target.classList.contains(`nav__link`)) {
+//     const link = e.target;
+//     const siblings = link.closest(`.nav`).querySelectorAll(`.nav__link`);
+//     const logo = link.closest(`.nav`).querySelector(`img`);
+
+//     siblings.forEach(function(el){
+//       if (el !== link) el.style.opacity = opacity; 
+//     })
+//     logo.style.opacity = opacity;
+//   }
+// }
+
+// const nav = document.querySelector(`.nav`);
+// nav.addEventListener(`mouseover`, function(e){
+//   handleHover(e, 0.5);
+// })
+
+// nav.addEventListener(`mouseout`, function(e){
+//   handleHover(e, 1);
+// })
+
