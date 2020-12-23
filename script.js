@@ -16,6 +16,9 @@ const nav = document.querySelector(`.nav`);
 const header = document.querySelector(`.header`);
 const navHeight = nav.getBoundingClientRect();
 
+const allSection = document.querySelectorAll(`.section`);
+
+const imgTargets = document.querySelectorAll(`img[data-src]`);
 ///////////////////////////////////////
 // Modal window
 const openModal = function (e) {
@@ -130,6 +133,56 @@ const stickyNavOps = {
 
 const headerObserver = new IntersectionObserver(stickyNav, stickyNavOps);
 headerObserver.observe(header);
+
+//Reveal elements
+const revealSection = function(entries, observer){
+  const [entry] = entries;
+
+  if (!entry.isIntersecting){
+    return; 
+  } else {
+    entry.target.classList.remove(`section--hidden`);
+  }
+
+  observer.unobserve(entry.target);
+}; 
+ 
+const revealSectionObs = {
+  root: null,
+  threshold: 0.15
+};
+ 
+const sectionObserver = new IntersectionObserver(revealSection, revealSectionObs);
+allSection.forEach(function(section){
+  sectionObserver.observe(section);
+  section.classList.add(`section--hidden`);
+});
+
+//Lazy Load
+const loadImg = function(entries, observer) {
+  const [entry] = entries;
+
+  if(!entry.isIntersecting) return;
+
+  entry.target.src = entry.target.dataset.src;
+
+  entry.target.addEventListener(`load`, function(){
+    entry.target.classList.remove(`lazy-img`);
+  })
+
+  observer.unobserve(entry.target);
+}
+
+const loadImgOps = {
+  root: null,
+  threshold: 0
+};
+
+const imgObserver = new IntersectionObserver(loadImg, loadImgOps)
+
+imgTargets.forEach(function(img){
+  imgObserver.observe(img);
+})
 
 ///////////////////////////////////////
 // Selecting, creating, and deleting elements
@@ -509,6 +562,7 @@ window.addEventListener(`scroll`, function(e){
 
 ///////////////////////////////////////
 // Sticky navigation: Intersection Observer API
+
 //This API observes changes to the way a certain target element 
 //intersects another element or the way it intersects the viewport.
 
@@ -555,3 +609,63 @@ window.addEventListener(`scroll`, function(e){
 // const headerObserver = new IntersectionObserver(stickyNav, stickyNavOps);
 // headerObserver.observe(header);
 
+///////////////////////////////////////
+// Revealing elements on scroll
+
+// const allSection = document.querySelectorAll(`.section`);
+
+// const revealSection = function(entries, observer){
+//   const [entry] = entries;
+//   console.log(entry);
+
+//   if (!entry.isIntersecting){
+//     return; 
+//   } else {
+//     entry.target.classList.remove(`section--hidden`);
+//   }
+
+//   observer.unobserve(entry.target);
+// } 
+ 
+// const revealSectionObs = {
+//   root: null,
+//   threshold: 0.15
+// };
+ 
+// const sectionObserver = new IntersectionObserver(revealSection, revealSectionObs);
+// allSection.forEach(function(section){
+//   sectionObserver.observe(section);
+//   section.classList.add(`section--hidden`);
+// })
+
+///////////////////////////////////////
+// Lazy loading images
+
+// const imgTargets = document.querySelectorAll(`img[data-src]`);
+// console.log(imgTargets);
+
+// const loadImg = function(entries, observer) {
+//   const [entry] = entries;
+//   console.log(entry);
+
+//   if(!entry.isIntersecting) return;
+
+//   //Replace src attributes with data-src 
+//   entry.target.src = entry.target.dataset.src;
+//   entry.target.addEventListener(`load`, function(){
+//     entry.target.classList.remove(`lazy-img`);
+//   })
+
+//   observer.unobserve(entry.target);
+// }
+
+// const loadImgOps = {
+//   root: null,
+//   threshold: 0
+// };
+
+// const imgObserver = new IntersectionObserver(loadImg, loadImgOps)
+
+// imgTargets.forEach(function(img){
+//   imgObserver.observe(img);
+// })
