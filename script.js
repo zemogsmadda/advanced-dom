@@ -13,6 +13,9 @@ const tabsContent = document.querySelectorAll(`.operations__content`);
 
 const nav = document.querySelector(`.nav`);
 
+const header = document.querySelector(`.header`);
+const navHeight = nav.getBoundingClientRect();
+
 ///////////////////////////////////////
 // Modal window
 const openModal = function (e) {
@@ -77,13 +80,14 @@ tabsContainer.addEventListener(`click`, function(e){
   document.querySelector
   (`.operations__content--${clicked.dataset.tab}`)
     .classList.add(`operations__content--active`);
+
 })
 
 //Navigation Hover
 const handleHover = function(e, opacity) {
   if (e.target.classList.contains(`nav__link`)) {
     const link = e.target;
-    
+
     const siblings = link
       .closest(`.nav`)
       .querySelectorAll(`.nav__link`);
@@ -106,6 +110,26 @@ nav.addEventListener(`mouseover`, function(e){
 nav.addEventListener(`mouseout`, function(e){
   handleHover(e, 1);
 })
+
+//Sticky Nav
+const stickyNav = function(entries, stickyNavOps) {
+  const [entry] = entries;
+
+  if (!entry.isIntersecting) {
+    nav.classList.add(`sticky`);
+  } else {
+    nav.classList.remove(`sticky`);
+  }
+}
+
+const stickyNavOps = { 
+  root: null, 
+  threshold: 0,
+  rootMargin: `-${navHeight.height}px`
+};
+
+const headerObserver = new IntersectionObserver(stickyNav, stickyNavOps);
+headerObserver.observe(header);
 
 ///////////////////////////////////////
 // Selecting, creating, and deleting elements
@@ -459,4 +483,75 @@ tabsContainer.addEventListener(`click`, function(e){
 // nav.addEventListener(`mouseout`, function(e){
 //   handleHover(e, 1);
 // })
+
+///////////////////////////////////////
+// Sticky Navigation
+
+//scroll event should be avoided
+//This will fire the function every px that you scroll it. 
+//Not good for performance
+
+/*
+const intialCoords = section1.getBoundingClientRect();
+console.log(intialCoords);
+
+window.addEventListener(`scroll`, function(e){
+  console.log(window.scrollY); 
+  if(window.scrollY > intialCoords.top) {
+    nav.classList
+      .add(`sticky`);
+  } else {
+    nav.classList
+      .remove(`sticky`);
+  }
+})
+*/
+
+///////////////////////////////////////
+// Sticky navigation: Intersection Observer API
+//This API observes changes to the way a certain target element 
+//intersects another element or the way it intersects the viewport.
+
+// const obsCallBack = function(entries, observer){
+//   entries.forEach(function(entry){
+//     return console.log(entry);
+//   }); 
+// };
+  
+// const obsOptions = {
+//   root: null,
+//   threshold: [0, 0.2],
+  //1 means that 100% of the section must be in the viewport for it to be triggered 
+// };
+//Whenever the first section (section 1 in this) is intersecting the viewport at 10% 
+//Viewport because it is the root, and since it is null thats the default
+//Threshold = 10% 
+//Multiple threshold is possible 
+
+// const observer = new IntersectionObserver(obsCallBack, obsOptions);
+// observer.observe(section1);  
+
+// const header = document.querySelector(`.header`);
+// const navHeight = nav.getBoundingClientRect();
+
+
+// const stickyNav = function(entries, stickyNavOps) {
+//   const [entry] = entries; Could have used entries[0] to get the first element but restructuring is better
+//   console.log(entry);
+
+//   if (!entry.isIntersecting) {
+//     nav.classList.add(`sticky`);
+//   } else {
+//     nav.classList.remove(`sticky`);
+//   }
+// }
+
+// const stickyNavOps = { 
+//   root: null, 
+//   threshold: 0,
+//   rootMargin: `-${navHeight.height}px`
+// };
+
+// const headerObserver = new IntersectionObserver(stickyNav, stickyNavOps);
+// headerObserver.observe(header);
 
