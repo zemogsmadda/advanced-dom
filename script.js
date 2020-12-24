@@ -155,7 +155,7 @@ const revealSectionObs = {
 const sectionObserver = new IntersectionObserver(revealSection, revealSectionObs);
 allSection.forEach(function(section){
   sectionObserver.observe(section);
-  section.classList.add(`section--hidden`);
+  // section.classList.add(`section--hidden`);
 });
 
 //Lazy Load
@@ -669,3 +669,7 @@ window.addEventListener(`scroll`, function(e){
 // imgTargets.forEach(function(img){
 //   imgObserver.observe(img);
 // })
+
+///////////////////////////////////////
+// Slider component part 1
+
